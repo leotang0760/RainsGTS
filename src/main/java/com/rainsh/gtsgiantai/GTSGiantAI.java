@@ -36,8 +36,36 @@ public final class GTSGiantAI extends JavaPlugin {
     private File giantsDataFile;
     private long globalTick = 0;
 
+    /**
+     * 改名迁移（v1.4.1）：旧版本插件目录 plugins/GTSGiantAI 存在而新目录 plugins/RainsGTS
+     * 不存在时，把配置/对话/持久巨人数据一次性复制过去，避免服主数据丢失。
+     */
+    private void migrateLegacyData() {
+        try {
+            File legacy = new File(getDataFolder().getParentFile(), "GTSGiantAI");
+            File current = getDataFolder();
+            if (!legacy.isDirectory() || current.exists()) return;
+            current.mkdirs();
+            File[] files = legacy.listFiles();
+            if (files == null) return;
+            int n = 0;
+            for (File f : files) {
+                if (f.isFile()) {
+                    java.nio.file.Files.copy(f.toPath(),
+                            new File(current, f.getName()).toPath(),
+                            java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    n++;
+                }
+            }
+            getLogger().info("已从旧目录 plugins/GTSGiantAI 迁移 " + n + " 个文件到 " + current.getName() + "/");
+        } catch (Throwable t) {
+            getLogger().warning("数据迁移失败（不影响运行）: " + t.getMessage());
+        }
+    }
+
     @Override
     public void onEnable() {
+        migrateLegacyData(); // v1.4.1 改名 RainsGTS：一次性迁移旧 GTSGiantAI 数据目录
         saveDefaultConfig();
         saveResourceIfMissing("messages.yml");
         saveResourceIfMissing("giants_data.yml");

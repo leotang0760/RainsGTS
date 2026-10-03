@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.rainsh</groupId>
-    <artifactId>GTSGiantAI</artifactId>
+    <artifactId>RainsGTS</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>GTSGiantAI</name>
+    <name>RainsGTS</name>
     <description>重度GTS向 人型女巨人 行为树AI Paper插件</description>
 
     <properties>

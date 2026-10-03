@@ -1,8 +1,10 @@
-# GTS GiantAI
+# RainsGTS（原 GTS GiantAI）
 
-**重度GTS向 · 人型女巨人 · 行为树AI · Paper插件（1.20.1+）· v1.4.0**
+**重度GTS向 · 人型女巨人 · 行为树AI · Paper插件（1.20.1+）· v1.4.1**
 
 为 GTS（Giantess/巨大娘）爱好者打造的 Paper 服务端专属插件：资源包驱动的分段骨骼巨型模型 + 自定义分段碰撞箱 + 行为树 AI，玩家只需加载服务器资源包，**客户端零 mod**。
+
+> v1.4.1：品牌更名为 **RainsGTS**（仓库 https://github.com/leotang0760/RainsGTS ），jar 更名 `RainsGTS-javaXX.jar`；启动时自动迁移旧 `plugins/GTSGiantAI/` 数据目录，服主无需手动搬文件。
 
 ---
 
@@ -41,14 +43,14 @@
 
 ## 🚀 安装（单 jar · 玩家零下载）
 
-**只需一个文件**：`GTSGiantAI-java17.jar` 同时是插件和模型资源包（内置 Toki 模型与 pack.mcmeta）。
+**只需一个文件**：`RainsGTS-java17.jar` 同时是插件和模型资源包（内置 Toki 模型与 pack.mcmeta）。
 
-1. 把 jar 放入服务器 `plugins/` 目录，重启服务器
+1. 把 jar 放入服务器 `plugins/` 目录，重启服务器（旧版 GTSGiantAI 数据会自动迁移到 `plugins/RainsGTS/`）
 2. **玩家什么都不用做**：插件内置 HTTP 分发服务器（默认端口 25564）自动把 jar 本身作为资源包推送给进服玩家（`resourcepack.auto: true`，进服 60tick 后自动弹出加载提示，点接受即显示模型）
 3. 也可手动补推：`/gts resourcepack send [玩家]`；控制台 `gts spawn toki 10` 生成测试巨人
 
 > 服务端要求：**Paper 1.20.1+**（含 Folia）。Spigot/CraftBukkit 不支持。
-> Java 要求：17 / 21 / 25 按 jar 版本对应。
+> Java 要求：17 / 21 / 25 按 jar 版本对应（java25 版需 Paper 1.21.5+ 新核心）。
 > 只放这一个 jar（勿与旧版 GTSGiantAI.jar 同目录，会触发插件名歧义）。
 > 公网IP自动探测失败时，在 `config.yml → resourcepack.server.publicHost` 手动填写服务器公网IP/域名；如需在玩家端强制加载，设 `resourcepack.force: true`。
 
