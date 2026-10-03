@@ -5,3 +5,5 @@ sources.txt
 GTSGiantAI-models/
 *.tar.gz
 *.class
+!dist/
+dist/*
