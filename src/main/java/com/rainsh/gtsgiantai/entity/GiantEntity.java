@@ -243,9 +243,11 @@ public class GiantEntity {
         }
     }
 
-    /** 脚部IK：采样脚下地形高度，微调脚部骨骼Y使脚贴合地面（限制最大步差防悬崖穿模） */
+    /** 脚部IK：采样脚下地形高度，整体平移锚点使脚贴合地面（身体联动、比例保持，限制最大步差防悬崖穿模） */
     private void applyFootIK(PoseLibrary.Pose pose) {
         double maxStep = manager.getPlugin().getConfig().getDouble("ik.max_step_height", 2.0);
+        double totalDiff = 0;
+        int n = 0;
         for (BoneId foot : new BoneId[]{BoneId.FOOT_L, BoneId.FOOT_R}) {
             BonePose bp = pose.get(foot);
             if (bp == null) continue;
@@ -254,11 +256,16 @@ public class GiantEntity {
             int gz = (int) Math.floor(w.z);
             if (world.getBlockAt(gx, (int) Math.floor(w.y) + 1, gz).isLiquid()) continue;
             int groundY = world.getHighestBlockYAt(gx, gz);
-            // 预期脚底高度：骨骼世界Y - 脚半高(BoneId.FOOT_R.getHalfH()*scale)
-            double footBottom = w.y - BoneId.FOOT_R.getHalfH() * scale;
+            // 渲染脚底（世界）：anchor + (translation.y + 元素底偏移) * scale；脚元素底约 -0.21~-0.24 格
+            double footBottom = w.y - 0.22 * scale;
             double diff = (groundY + 0.05) - footBottom;
             if (Math.abs(diff) > maxStep) continue;
-            bp.translation.y += (float) diff;
+            totalDiff += diff;
+            n++;
+        }
+        if (n > 0) {
+            // 整体平移锚点（世界格），所有骨骼相对 anchor 上堆 → 身体联动、比例不破坏
+            anchor.y += totalDiff / n;
         }
     }
 

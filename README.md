@@ -1,10 +1,10 @@
 # RainsGTS（原 GTS GiantAI）
 
-**重度GTS向 · 人型女巨人 · 行为树AI · Paper插件（1.20.1+）· v1.4.1**
+**重度GTS向 · 人型女巨人 · 行为树AI · Paper插件（1.20.1+）· v1.4.2**
 
 为 GTS（Giantess/巨大娘）爱好者打造的 Paper 服务端专属插件：资源包驱动的分段骨骼巨型模型 + 自定义分段碰撞箱 + 行为树 AI，玩家只需加载服务器资源包，**客户端零 mod**。
 
-> v1.4.1：品牌更名为 **RainsGTS**（仓库 https://github.com/leotang0760/RainsGTS ），jar 更名 `RainsGTS-javaXX.jar`；启动时自动迁移旧 `plugins/GTSGiantAI/` 数据目录，服主无需手动搬文件。
+> v1.4.2：修复巨人悬空（IK 整体锚定地面，身体联动不散架）与资源包新版兼容（pack_format 15 + supported_formats 15-99，1.20.1~1.22 客户端均可加载）；v1.4.1：品牌更名 **RainsGTS**（仓库 https://github.com/leotang0760/RainsGTS ），jar 更名 `RainsGTS-javaXX.jar`，旧 `plugins/GTSGiantAI/` 数据自动迁移。
 
 ---
 
