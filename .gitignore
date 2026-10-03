@@ -1,0 +1,7 @@
+target/
+testserver/
+libs/
+sources.txt
+GTSGiantAI-models/
+*.tar.gz
+*.class

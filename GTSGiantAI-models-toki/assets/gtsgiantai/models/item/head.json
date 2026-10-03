@@ -1,0 +1,1 @@
+{"parent": "item/generated", "textures": {"layer0": "gtsgiantai:item/toki"}, "overrides": [{"predicate": {"custom_model_data": 1000}, "model": "gtsgiantai:item/head_model"}]}

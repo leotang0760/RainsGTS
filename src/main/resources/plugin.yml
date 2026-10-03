@@ -1,0 +1,31 @@
+name: GTSGiantAI
+main: com.rainsh.gtsgiantai.GTSGiantAI
+version: 1.1.0
+api-version: 1.20
+description: 重度GTS向 人型女巨人 行为树AI 插件（Display+Interaction渲染/碰撞，零客户端mod）
+author: Rainsh Studio
+website: https://github.com/RainshStudio
+
+# 可选软依赖：有则启用增强功能（领地保护），无则自动降级，不影响运行
+softdepend:
+  - LuckPerms
+  - WorldGuard
+  - GriefPrevention
+
+commands:
+  gtsgiantai:
+    description: GTS GiantAI 管理指令
+    usage: /gts help
+    aliases: [ gts ]
+    permission: gtsgiantai.admin
+
+permissions:
+  gtsgiantai.admin:
+    description: 全部管理员指令
+    default: op
+  gtsgiantai.bypass.builddamage:
+    description: 玩家建筑不受巨人坐下/碾压破坏
+    default: false
+  gtsgiantai.no-interact:
+    description: 玩家不会被巨人亲密交互抓取（捧起/戏弄）
+    default: false

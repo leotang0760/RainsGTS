@@ -1,0 +1,30 @@
+# ============================================================
+#  GTS GiantAI 消息文件（可汉化/自定义）
+#  占位符: {giant}, {id}, {scale}, {player}, {action}
+# ============================================================
+
+prefix: "&8[&dGTS&8] &r"
+
+admin:
+  no-permission: "&c你没有权限执行此操作。"
+  only-player: "&c该指令仅限玩家执行。"
+  giant-spawned: "&a已生成巨人 {giant}（倍率 x{scale}）ID: {id}"
+  giant-removed: "&a已删除巨人 {giant}（ID: {id}）"
+  giant-not-found: "&c未找到巨人 ID: {id}"
+  giant-list-header: "&d当前世界巨人列表:"
+  giant-list-entry: "&7- &f{id} &7| {giant} &7| x{scale} &7| {state} &7| {location}"
+  giant-empty: "&7当前世界没有巨人。"
+  state-changed: "&a巨人 {id} 状态已切换为 {state}"
+  scale-changed: "&a巨人 {id} 倍率已修改为 x{scale}"
+  mood-changed: "&a巨人 {id} 心情已设置为 {mood}"
+  action-forced: "&a巨人 {id} 已强制触发动作 {action}"
+  reloaded: "&a配置已重载。"
+  resourcepack-sent: "&a资源包已推送给 {player}"
+  usage: "&e用法: /gts <spawn|remove|list|state|scale|mood|forceaction|reload|resourcepack|trace|help>"
+
+player:
+  wake-up: "&7你惊醒了沉睡的巨人……"
+  grabbed: "&c你被巨人抓住了！按Shift挣扎挣脱！"
+  released: "&a你从巨人手中挣脱了！"
+  stomped: "&c巨人踩踏！受到 {damage} 点伤害"
+  pushed: "&7巨人轻轻把你拨到了一边"

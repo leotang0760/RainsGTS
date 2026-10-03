@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.rainsh</groupId>
+    <artifactId>GTSGiantAI</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>GTSGiantAI</name>
+    <description>重度GTS向 人型女巨人 行为树AI Paper插件</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Paper API：服务端自带，不打进jar -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>GTSGiantAI</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Title>GTSGiantAI</Implementation-Title>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Built-By>Rainsh Studio</Built-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 三套Java字节码构建：同一份源码，release 17/21/25 -->
+    <!-- 用法：mvn clean package -Pjava17 / -Pjava21 / -Pjava25 -->
+    <profiles>
+        <profile>
+            <id>java17</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.compiler.release>17</maven.compiler.release>
+            </properties>
+            <build>
+                <finalName>GTSGiantAI-java17</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>java21</id>
+            <properties>
+                <maven.compiler.release>21</maven.compiler.release>
+            </properties>
+            <build>
+                <finalName>GTSGiantAI-java21</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>java25</id>
+            <properties>
+                <maven.compiler.release>25</maven.compiler.release>
+            </properties>
+            <build>
+                <finalName>GTSGiantAI-java25</finalName>
+            </build>
+        </profile>
+    </profiles>
+</project>

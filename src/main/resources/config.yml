@@ -1,0 +1,316 @@
+# ============================================================
+#  GTS GiantAI 主配置文件 v1.0.0
+#  重启服务器 或 使用 /gts reload 生效
+# ============================================================
+
+# 全局巨人控制
+global:
+  # 每个世界巨人总数硬上限（长期持久巨人，务必压低）
+  max_giants_per_world: 4
+  # 巨人持久化：服务器重启后原地恢复（SLEEP/IDLE状态与坐标）
+  persist_giants: true
+  # 巨人死亡后，该世界允许重新生成的冷却（秒）
+  respawn_cooldown_seconds: 3600
+  # 是否允许自然生成（关闭后只能通过指令生成）
+  natural_spawn: true
+
+# 体型档位定义（倍率区间、行为差异）
+scale_tiers:
+  small:
+    min: 2.5
+    max: 5.0
+    # 生成权重
+    spawn_weight: 60
+    # 是否允许潜行免疫唤醒
+    sneak_immune: true
+  medium:
+    min: 8.0
+    max: 10.0
+    spawn_weight: 30
+    sneak_immune: true
+  huge:
+    min: 10.0
+    max: 100.0
+    spawn_weight: 10
+    sneak_immune: true
+  # 档位判定阈值：scale >= huge_min 视为"大体型"
+  huge_min: 10.0
+
+# ---------------- 休眠与唤醒规则 ----------------
+sleep_rules:
+  # 追逐状态绝对禁止休眠
+  chase_cannot_sleep: true
+  # 半径内无玩家 才允许判定休眠
+  no_player_range: 32
+  # 休眠判定间隔（游戏刻）
+  check_interval_ticks: 200
+  # 基础休眠概率（每次判定）
+  base_chance: 0.15
+  # 夜间休眠概率加成
+  night_bonus: 0.35
+  # 白天地形不安全加成（雨天等）
+  weather_bonus: 0.10
+
+# 唤醒灵敏度（按体型）
+wake_rules:
+  # 小体型（< huge_min）：警戒半径内 未潜行 玩家 → 唤醒
+  small_alert_range: 24
+  # 大体型（>= huge_min）：仅触碰碰撞盒唤醒；远距离无感
+  huge_touch_only: true
+  # 潜行蹲下永不唤醒（所有体型）
+  sneak_immune: true
+  # 玩家攻击巨人必定唤醒
+  attack_wakes: true
+
+# ---------------- 行为树参数 ----------------
+behavior:
+  # AI主循环间隔（游戏刻）：战斗=1tick，空闲/警戒=2~3，休眠=20
+  tick_interval_alert: 1
+  tick_interval_idle: 2
+  tick_interval_sleep: 20
+  # 巡逻半径
+  patrol_radius: 40
+  # 追击最大距离（超过则脱战回空闲）
+  chase_max_distance: 80
+  # 脱战后回空闲冷却（游戏刻）
+  cooldown_after_chase: 200
+  # 无聊值上限（达到触发无聊行为）
+  boredom_max: 600
+  # 环境扫描间隔（游戏刻）
+  environment_scan_interval: 40
+
+# ---------------- 无聊行为权重（随机触发） ----------------
+boredom_actions:
+  stomp: 0.20
+  kick_player: 0.15
+  look_around: 0.40
+  sit_rest: 0.25
+
+# ---------------- 心情系统（影响动作权重） ----------------
+moods:
+  calm: { sit: 0.4, lean: 0.3, lie_down: 0.3 }
+  playful: { tease: 0.4, hold: 0.25, observe: 0.2, step_over: 0.15 }
+  annoyed: { stomp: 0.35, intimidate: 0.3, crush_warning: 0.2, destroy: 0.15 }
+  aggressive: { attack: 0.5, chase: 0.3, crush_structure: 0.2 }
+  # 心情随机切换间隔（游戏刻），-1关闭
+  mood_change_interval: 12000
+
+# ---------------- 渲染（资源包模型接入） ----------------
+render:
+  # 骨骼Display承载物品：资源包模型用 CustomModelData 区分
+  # 无资源包时使用原版物品占位（玩家头颅）
+  base_material: PLAYER_HEAD
+  custom_model_data: 1000
+
+# ---------------- 亲密交互动作权重 ----------------
+intimate_actions:
+  observe: 0.15
+  tease: 0.12
+  hold: 0.08
+  step_over: 0.10
+  block_path: 0.10
+  cuddle: 0.05
+  whisper: 0.05
+  crush_warning: 0.10
+  # 亲密交互最短距离
+  min_distance: 3
+  max_distance: 6
+  # 玩家攻击后亲密冷却（游戏刻）
+  cooldown_after_attack: 600
+
+# ---------------- 村庄互动 ----------------
+village:
+  enabled: true
+  # 村庄判定：16格内村民数量达到阈值视为村庄
+  villager_count_threshold: 3
+  scan_radius: 16
+  # 村庄生成：中小型3-5只集群；大体型强制单只
+  small_group_min: 3
+  small_group_max: 5
+  # 村庄内大体型强制单只
+  huge_forced_single: true
+  # 村庄集群生成概率（村庄内自然生成时）
+  group_spawn_chance: 0.15
+  behaviors:
+    wander_through: 0.30
+    watch_villager: 0.20
+    tease_villager: 0.15
+    sit_on_house: 0.10
+    lean_on_building: 0.10
+    crush_structure: 0.10
+    destroy_building: 0.05
+  # 大体型是否允许碾压村庄建筑
+  huge_can_destroy_buildings: true
+  # 玩家建筑是否可能被巨人坐下/碾压
+  player_buildings_targetable: false
+  # 坐房子时方块破坏半径（按体型分级乘数）
+  sit_house_break_radius: 3
+  # 被破坏方块自动还原时间（秒）
+  building_restore_seconds: 600
+
+# ---------------- 世界痕迹系统 ----------------
+traces:
+  enabled: true
+  # 脚印：巨人行走实时生成
+  footprint:
+    enabled: true
+    # 脚印粒子密度
+    particle_density: 12
+    # v1.4 脚印方块实体（压痕扁片，可留存数秒；雪地变白色）
+    block: true
+    # 脚印方块留存时间（秒）
+    block_seconds: 8
+    # 世界空闲小概率刷新"远古脚印"（无巨人存在，纯彩蛋）
+    ancient_random_chance: 0.001
+  # 压痕：坐下/跺脚/落地
+  crush_mark:
+    enabled: true
+    restore_seconds: 300
+  # 植被破坏：行走/踩踏压坏花草
+  vegetation:
+    enabled: true
+    restore_seconds: 600
+  # 远古脚印触发间隔（游戏刻，默认每5分钟检查一次）
+  ancient_check_interval: 6000
+
+# ---------------- 多阶段Boss与血量 ----------------
+boss:
+  enabled: true
+  # 基础血量（x5档位基准），实际 = base + scale * per_scale
+  hp_base: 100.0
+  hp_per_scale: 20.0
+  # 部位弱点倍率：头部/胸
+  head_damage_multiplier: 3.0
+  torso_damage_multiplier: 1.5
+  limb_damage_multiplier: 0.5
+  # 阶段切换：血量百分比阈值（低于则进入下一阶段）
+  phases:
+    phase2_below: 0.66
+    phase3_below: 0.33
+  # 阶段属性加成：攻击/速度乘数
+  phase2_attack_multiplier: 1.25
+  phase3_attack_multiplier: 1.6
+  phase2_speed_multiplier: 1.15
+  phase3_speed_multiplier: 1.3
+  # Boss死亡：掉落物（经验球 + 掉落表）
+  death_experience: 100
+  death_particles: true
+
+# ---------------- 抓取挣扎 ----------------
+grab:
+  # 挣扎进度条（BossBar）：按住Shift持续挣扎，满100挣脱
+  enabled: true
+  struggle_per_tick: 1.5
+  # 挣扎时玩家是否持续受挤压伤害
+  squeeze_damage: 1.0
+  squeeze_interval_ticks: 40
+
+# ---------------- 脚步音效/震动 ----------------
+sound:
+  enabled: true
+  # 脚步音效间隔（tick）
+  step_interval_ticks: 12
+  # 落地冲击（跺脚/重击）：附近玩家屏幕震动强度
+  impact_shake_strength: 0.8
+  impact_radius: 12
+
+# ---------------- 脚部IK ----------------
+ik:
+  enabled: true
+  # IK采样半径（格）
+  sample_radius: 2
+  # 贴合最大高度差（超过则不贴合，防止悬崖穿模）
+  max_step_height: 2.0
+
+# ---------------- 环境待机姿态 ----------------
+environmental_stance:
+  sit: 0.30
+  lean: 0.25
+  lie_down: 0.20
+  rest_against_mountain: 0.10
+  rest_at_seaside: 0.15
+  # 姿态持续时间范围（游戏刻）
+  duration_min: 600
+  duration_max: 2400
+
+# ---------------- 分段碰撞箱 ----------------
+collision:
+  # 碰撞盒向内收缩距离（格），降低穿模
+  shrink_offset: 0.20
+  # 是否启用位置Lerp插值平滑（降低动画跳变穿模）
+  use_interpolation: true
+  # 玩家卡入巨人身体时 轻柔推出
+  player_push_out: true
+  # LOD：>far距离合并为简易包围盒；<near启用精细分段
+  lod:
+    far: 60
+    near: 30
+  # 同步频率：战斗/亲密=1tick；空闲=2~3；休眠=20
+  sync_interval_alert: 1
+  sync_interval_idle: 3
+  sync_interval_sleep: 20
+  # 分层掩码（可独立开关）
+  layers:
+    wake_trigger: true
+    hand_interact: true
+    body_block: true
+    stomp_damage: true
+
+# ---------------- 破坏与保护 ----------------
+damage:
+  # 大体型踩踏/攻击的基础方块破坏半径
+  stomp_radius: 3
+  ground_slam_radius: 5
+  # 领地保护：WorldGuard/GriefPrevention 存在时自动启用
+  respect_claims: true
+  # 禁用破坏的世界列表
+  disabled_worlds: []
+  # 禁止破坏的方块黑名单（namespaced key）
+  block_blacklist:
+    - "minecraft:bedrock"
+    - "minecraft:command_block"
+    - "minecraft:obsidian"
+
+# ---------------- 资源包推送（模型外观，玩家零操作自动加载） ----------------
+resourcepack:
+  # 外部直链（可选）：若填写则优先使用该URL，不再启动内置分发
+  # 例: https://你的域名/gts-models.zip（把插件jar本身托管即可，它就是合法资源包）
+  url: ""
+  # true=玩家拒绝加载资源包将被踢出；false=可拒绝（显示默认占位）
+  force: false
+  # 加载提示语
+  prompt: "本服务器使用 GTS 巨人模型资源包，请点击接受以加载模型"
+  # 玩家进服自动推送
+  auto: true
+  # 进服后延迟（tick，1秒=20tick；留时间让玩家落地再弹提示）
+  delay: 60
+  # 内置分发服务器（无需任何外部托管，插件把自身jar作为资源包下发）
+  server:
+    enabled: true
+    bind: "0.0.0.0"
+    port: 25564
+    # 玩家可达的公网IP/域名；留空则自动探测公网IP（探测失败时需手动填写）
+    publicHost: ""
+
+# ---------------- 对话系统（v1.3） ----------------
+dialogue:
+  # 开关（句子内容在 dialogue.yml 编辑）
+  enabled: true
+  # 喂食互动（拿食物右键巨人 → 投喂）
+  feed: true
+  # 心形粒子（亲密/喂食时胸口喷爱心）
+  hearts: true
+  # v1.4 环境音（接近巨人时低沉心跳/低语）
+  ambient_sound: true
+
+# ---------------- LuckPerms 接口 ----------------
+luckperms:
+  # 自动检测：存在LP则用LP权限，否则退化为Bukkit权限
+  enabled: true
+
+# ---------------- 调试 ----------------
+debug:
+  # 显示碰撞盒可视化（绿色玻璃边框粒子，仅OP可见）
+  show_collision_boxes: false
+  # 行为树执行日志
+  behavior_tree_log: false
