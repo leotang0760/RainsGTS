@@ -95,7 +95,9 @@ public class GiantEntity {
         this.dialogue = manager.getPlugin().getDialogue();
 
         for (BoneId bone : BoneId.values()) {
-            BoneDisplay bd = new BoneDisplay(world, loc, bone, new ItemStack(mat), cmd);
+            // v1.4.3：每段骨骼独立 CMD（base + ordinal → 1000~1009），与资源包 items 映射一一对应
+            int boneCmd = cmd + bone.ordinal();
+            BoneDisplay bd = new BoneDisplay(world, loc, bone, new ItemStack(mat), boneCmd);
             displays.put(bone, bd);
             CollisionBox box = new CollisionBox(world, loc, bone,
                     bone.getHalfW() + 0.05, bone.getHalfH() + 0.05, bone.getHalfD() + 0.05,
